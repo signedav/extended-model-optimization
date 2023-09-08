@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>Extended Model Optimization</title>
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./dist/reset.css" />
+    <link rel="stylesheet" href="./dist/reveal.css" />
+    <link rel="stylesheet" href="./_assets/stylesheets/collab-theme.css" id="theme" />
+    <link rel="stylesheet" href="./css/highlight/base16/zenburn.css" />
+
+
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template">
+
+# Verbessertes Arbeiten mit erweiterten INTERLIS Modellen in Model Baker
+</script></section><section  data-markdown><script type="text/template">
+## Problem
+
+Wenn ein Modell bzw. Topic **erweiterte Klassen** enthält, werden die **inklusive Basisklassen** in der physischen Datenbank implementiert...
+ 
+... und folglich Layer in QGIS erstellt. 
+
+Da die erweiterten Klassen oftmals die **gleichen Namen** haben, ist es schwierig sich zurecht zu finden.
+</script></section><section  data-markdown><script type="text/template">
+![problem](assets/problem.png)
+
+Dabei möchte Benutzer:in nur das sehen, was relevant ist 🙄
+
+... und das schreckt auch Newbies ab 😱
+</script></section><section  data-markdown><script type="text/template">
+## QGIS.ch hat finanziert
+
+Doch ist nicht so einfach:
+
+**Model Baker kann nicht immer wissen, was für Benutzer:in sehen möchte.**
+
+<aside class="notes">
+Da es fast unmöglich erscheint, alle Fälle zu berücksichtigen, muss ich einige Annahmen treffen, was meistens der Fall sein wird.</aside>
+</script></section><section  data-markdown><script type="text/template">
+## Annahmen
+
+- Wenn du eine Basisklasse mit **demselben** Namen erweiterst, willst du sie "ersetzen", sonst würdest du sie umbenennen.
+- Wenn du eine Basisklasse **mehrfach** erweiterst (was man mit unterschiedlichen Namen tut), dann willst du sie ebenfalls "ersetzen".
+- Ausnahme der beiden Fällen: Wenn du die Klasse im gleichen Modell, aber in einem anderen Thema erweiterst (denn wenn du die Absicht hättest, sie zu "ersetzen", hättest du sie zu `ABSTRACT` gemacht).
+</script></section><section  data-markdown><script type="text/template">
+## Ansatz 
+- Basisklassen mit ***gleichnamigen*** Erweiterungen sind ***irrelevant***
+- Basisklassen mit ***mehreren*** Erweiterungen sind ***irrelevant***
+- Ausser wenn die Erweiterung im ***gleichen Modell*** ist, sind sie nicht ***nicht irrelevant***
+</script></section><section  data-markdown><script type="text/template">
+## Strategie 1: Verstecken
+- Basisklassen-Layer mit gleichnamigen Erweiterungen werden ***ausgeblendet*** und Basisklassen-Layer mit mehreren Erweiterungen ***ebenfalls***. Es sei denn, die Erweiterung befindet sich im selben Modell, dann wird sie ***nicht ausgeblendet***, sondern ***umbenannt***.
+- Beziehungen von ausgeblendeten Ebenen werden ***nicht erstellt*** und damit auch ***keine Widgets***.
+</script></section><section  data-markdown><script type="text/template">
+## Strategie 2: Gruppieren
+- Basisklassen-Layer mit gleichnamigen Erweiterungen werden ***in einer Gruppe zusammengefasst***, Basisklassen-Layer mit mehreren Erweiterungen ***ebenfalls***. Ausser wenn die Erweiterung im gleichen Modell ist, dann wird sie ***nicht gruppiert***, sondern ***umbenannt***.
+- Beziehungen der gruppierten Ebenen werden ***erstellt***, aber die Widgets werden ***nicht auf das Formular angewendet***.
+</script></section><section  data-markdown><script type="text/template">
+## Keine Strategie: Umbenennung
+
+**Wird neu sowieso gemacht**:
+Sofern ein Layer mit gleichem Namen besteht, wird das Topic vorangesetzt.
+</script></section><section  data-markdown><script type="text/template">
+![none](assets/none.png)
+</script></section><section  data-markdown><script type="text/template">
+![group](assets/group.png)
+</script></section><section  data-markdown><script type="text/template">
+![hide](assets/hide.png)
+</script></section><section  data-markdown><script type="text/template">
+## Schauen wirs uns an
+
+- Staedtische_Ortsplanung_V1 Modell
+- Model Baker Prototype
+</script></section><section  data-markdown><script type="text/template">
+## Questions?
+<br>
+
+#### Web: www.opengis.ch
+#### Emails: info@opengis.ch 
+#### Social: @opengisch
+</script></section></div>
+    </div>
+
+    <script src="./dist/reveal.js"></script>
+
+    <script src="./plugin/markdown/markdown.js"></script>
+    <script src="./plugin/highlight/highlight.js"></script>
+    <script src="./plugin/zoom/zoom.js"></script>
+    <script src="./plugin/notes/notes.js"></script>
+    <script src="./plugin/math/math.js"></script>
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        slideNumber: true,
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath
+        ]
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"transition":"none","slideNumber":false,"overview":true,"autoPlayMedia":true}, queryOptions);
+    </script>
+
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+</html>
