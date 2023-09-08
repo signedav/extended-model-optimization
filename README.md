@@ -1,7 +1,5 @@
 # Extended Model Optimzation in QGIS Model Baker
 
-To fork and create a single talk on a seperate repo published with reveal-md and github pages.
-
 - Slides available on the following link: https://signedav.github.io/extended-model-optimization/presentation.html#/ (created by push on `main`)
 - Press `F11` to maximize browser window.
 - Press `s` to open Speaker Notes.
